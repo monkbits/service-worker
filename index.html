@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <h2 id="name" style="padding: 20rem">
+        ankur
+    </h2>
+    <script>
+        var cache = '';
+        navigator.serviceWorker.register('sw.js').then(
+            (registration)=>{
+                if (registration.active) {
+                    registration.active.postMessage({ cache: cache, message: 'Hello from Main Script!' });
+                }
+                console.log(registration.scope , cache)
+            }
+        )
+
+        navigator.serviceWorker.addEventListener('message', event => {
+            if(event.data.action == 'dataFetched'){
+                $('#name').text(event.data.title);
+            }else{
+                console.log("error hai!!");
+            }
+            // cache = event.data.cache
+        // console.log('Received from Service Worker:', event.data.cache);
+        });
+    </script>
+</body>
+</html>
